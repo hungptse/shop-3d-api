@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace ShopAPI.Entities
+{
+    public partial class OrderDetail
+    {
+        public int Id { get; set; }
+        public int? OrderId { get; set; }
+        public int? ProId { get; set; }
+        public int? Quantity { get; set; }
+        public double? Price { get; set; }
+
+        public Order Order { get; set; }
+        public Product Pro { get; set; }
+    }
+}
