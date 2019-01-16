@@ -12,7 +12,7 @@ namespace ShopAPI.Controllers
     {
 
         private WebsiteShoppingContext context = new WebsiteShoppingContext();
-
+       
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<Account>> Get()
