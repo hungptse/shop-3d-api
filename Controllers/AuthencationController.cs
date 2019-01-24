@@ -5,6 +5,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ShopAPI.Entities;
 using ShopAPI.Helpers;
+using Microsoft;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+
 namespace ShopAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -15,8 +24,9 @@ namespace ShopAPI.Controllers
 
 
         // [AUTHENCATE]
-        [HttpPost]
-        public ActionResult checkLogin([FromBody] Dictionary<string,string> body)
+        [AllowAnonymous]
+        [HttpPost("/login")]
+        public ActionResult CheckLogin([FromBody] Dictionary<string,string> body)
         {
             string username = body.GetValueOrDefault("username");
             string password = body.GetValueOrDefault("password");
@@ -30,7 +40,7 @@ namespace ShopAPI.Controllers
                     return Ok(); 
                 }
             } 
-            return BadRequest("Invalid username or password");
+            return Unauthorized();
         }
     }
 }
