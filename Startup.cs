@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using ShopAPI.Helpers;
 using Swashbuckle.AspNetCore.Swagger;
-using System;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ShopAPI
 {
@@ -24,19 +26,21 @@ namespace ShopAPI
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    //ValidIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER"),
-                    //ValidAudience = Environment.GetEnvironmentVariable("JWT_ISSUER")
-                };
+                    ValidAudience = "3dmodel.com",
+                    ValidIssuer = "3dmodel.com",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("3D_MODEL_HUNGPT_FUHCM"))
+            };
             });
 
+        
 
             services.AddSwaggerGen(c =>
             {

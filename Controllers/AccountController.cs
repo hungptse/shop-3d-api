@@ -23,7 +23,7 @@ namespace ShopAPI.Controllers
        
         // GET api/values
         [HttpGet]
-        [Authorize(Roles = "")]
+        [Authorize]
         public ActionResult<IEnumerable<Account>> Get()
         {
             return context.Account.ToArray();
