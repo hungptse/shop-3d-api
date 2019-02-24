@@ -19,39 +19,40 @@ namespace ShopAPI.Controllers
             var cartOfUser = carts.SingleOrDefault(cart => cart.accId == userId);
             if (cartOfUser != null)
             {
-                return cartOfUser;
+                return Ok(cartOfUser);
             }
-            else carts.Add(new CartObj(userId));
-            return Ok(cartOfUser);
+            CartObj cartNewUser = new CartObj(userId);
+            carts.Add(cartNewUser);
+            return Ok(cartNewUser);
         }
 
         [HttpPost("{userId}")]
         public ActionResult<CartObj> addToCart([FromRoute] string userId, [FromBody] Dictionary<string, string> body)
         {
             var cartOfUser = carts.SingleOrDefault(cart => cart.accId == userId);
-            if (cartOfUser != null)
+            if (cartOfUser == null)
             {
-                var idPro = int.Parse(body.GetValueOrDefault("id"));
-                var quantity = int.Parse(body.GetValueOrDefault("quantity"));
-                var price = float.Parse(body.GetValueOrDefault("price"));
-                var name = body.GetValueOrDefault("name");
-                if (cartOfUser.Cart.SingleOrDefault(p => p.ID == idPro) == null)
-                {
-                    ProductInCart productInCart = new ProductInCart { ID = idPro, Name = name, Price = price, Quantity = quantity };
-                    cartOfUser.Cart.Add(productInCart);
-                }
-                else
-                {
-                    ProductInCart productInCart = cartOfUser.Cart.SingleOrDefault(p => p.ID == idPro);
-                    productInCart.Quantity++;
-                }
-
-                return Ok(cartOfUser);
-            } else
-            {
-                carts.Add(new CartObj(userId));
+                CartObj cartNewUser = new CartObj(userId);
+                carts.Add(cartNewUser);
+                return Ok(cartNewUser);
             }
-            return BadRequest();
+            var idPro = int.Parse(body.GetValueOrDefault("id"));
+            var quantity = int.Parse(body.GetValueOrDefault("quantity"));
+            var price = float.Parse(body.GetValueOrDefault("price"));
+            var name = body.GetValueOrDefault("name");
+            if (cartOfUser.Cart.SingleOrDefault(p => p.ID == idPro) == null)
+            {
+                ProductInCart productInCart = new ProductInCart { ID = idPro, Name = name, Price = price, Quantity = quantity };
+                cartOfUser.Cart.Add(productInCart);
+            }
+            else
+            {
+                ProductInCart productInCart = cartOfUser.Cart.SingleOrDefault(p => p.ID == idPro);
+                productInCart.Quantity++;
+            }
+            return Ok(cartOfUser);
+
+            //carts.Add(new CartObj(userId));
         }
 
         [HttpPut("{userId}")]
@@ -65,7 +66,7 @@ namespace ShopAPI.Controllers
                 {
                     ProductInCart productInCart = cartOfUser.Cart.Single(p => p.ID == idPro);
                     cartOfUser.Cart.Remove(productInCart);
-                    return Ok();
+                    return Ok(cartOfUser);
                 }
             }
             return BadRequest();
