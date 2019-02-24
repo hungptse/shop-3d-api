@@ -11,51 +11,52 @@ namespace ShopAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class ImageController : ControllerBase
     {
         private WebsiteShoppingContext _context = new WebsiteShoppingContext();
 
-        // GET: api/Product
+
+        // GET: api/Image
         [HttpGet]
-        public IEnumerable<Product> GetProduct()
+        public IEnumerable<Image> GetImage()
         {
-            return _context.Product;
+            return _context.Image;
         }
 
-        // GET: api/Product/5
+        // GET: api/Image/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetProduct([FromRoute] int id)
+        public async Task<IActionResult> GetImage([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var product = await _context.Product.FindAsync(id);
+            var image = await _context.Image.FindAsync(id);
 
-            if (product == null)
+            if (image == null)
             {
                 return NotFound();
             }
 
-            return Ok(product);
+            return Ok(image);
         }
 
-        // PUT: api/Product/5
+        // PUT: api/Image/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct([FromRoute] int id, [FromBody] Product product)
+        public async Task<IActionResult> PutImage([FromRoute] int id, [FromBody] Image image)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != product.Id)
+            if (id != image.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(product).State = EntityState.Modified;
+            _context.Entry(image).State = EntityState.Modified;
 
             try
             {
@@ -63,7 +64,7 @@ namespace ShopAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductExists(id))
+                if (!ImageExists(id))
                 {
                     return NotFound();
                 }
@@ -76,59 +77,53 @@ namespace ShopAPI.Controllers
             return NoContent();
         }
 
-        // POST: api/Product
+        // POST: api/Image
         [HttpPost]
-        public async Task<IActionResult> PostProduct([FromBody] Product product)
+        public async Task<IActionResult> PostImage([FromBody] Image image)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Product.Add(product);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (ProductExists(product.Id))
-                {
-                    return new StatusCodeResult(StatusCodes.Status409Conflict);
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _context.Image.Add(image);
+            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProduct", new { id = product.Id }, product);
+            return CreatedAtAction("GetImage", new { id = image.Id }, image);
         }
 
-        // DELETE: api/Product/5
+        // DELETE: api/Image/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct([FromRoute] int id)
+        public async Task<IActionResult> DeleteImage([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var product = await _context.Product.FindAsync(id);
-            if (product == null)
+            var image = await _context.Image.FindAsync(id);
+            if (image == null)
             {
                 return NotFound();
             }
 
-            _context.Product.Remove(product);
+            _context.Image.Remove(image);
             await _context.SaveChangesAsync();
 
-            return Ok(product);
+            return Ok(image);
         }
 
-        private bool ProductExists(int id)
-        {
-            return _context.Product.Any(e => e.Id == id);
+        private bool ImageExists(int id)
+        { 
+            return _context.Image.Any(e => e.Id == id);
         }
+
+        //[HttpGet("/pro")]
+        //public IEnumerable<Image> GetImageByProId([FromBody] int id)
+        //{
+        //    return _context.Image.Where(e => e.ProId == id);
+        //}
+
+
     }
 }
