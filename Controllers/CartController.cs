@@ -13,6 +13,13 @@ namespace ShopAPI.Controllers
 
         private static List<CartObj> carts = new List<CartObj>();
 
+        [HttpGet]
+        public ActionResult<CartObj> GetAllCart()
+        {
+            return Ok(carts);
+        }
+
+
         [HttpGet("{userId}")]
         public ActionResult<CartObj> GetCartByUser(string userId)
         {
@@ -21,25 +28,30 @@ namespace ShopAPI.Controllers
             {
                 return Ok(cartOfUser);
             }
-            CartObj cartNewUser = new CartObj(userId);
-            carts.Add(cartNewUser);
-            return Ok(cartNewUser);
+            else
+            {
+                CartObj cartNewUser = new CartObj(userId);
+                carts.Add(cartNewUser);
+                return Ok(cartNewUser);
+            }
         }
 
         [HttpPost("{userId}")]
         public ActionResult<CartObj> addToCart([FromRoute] string userId, [FromBody] Dictionary<string, string> body)
         {
             var cartOfUser = carts.SingleOrDefault(cart => cart.accId == userId);
-            if (cartOfUser == null)
-            {
-                CartObj cartNewUser = new CartObj(userId);
-                carts.Add(cartNewUser);
-                return Ok(cartNewUser);
-            }
             var idPro = int.Parse(body.GetValueOrDefault("id"));
             var quantity = int.Parse(body.GetValueOrDefault("quantity"));
             var price = float.Parse(body.GetValueOrDefault("price"));
             var name = body.GetValueOrDefault("name");
+            if (cartOfUser == null)
+            {
+                CartObj cartNewUser = new CartObj(userId);
+                cartNewUser.Cart.Add(new ProductInCart { ID = idPro, Name = name, Price = price, Quantity = quantity });
+                carts.Add(cartNewUser);
+                return Ok(cartNewUser);
+            }
+
             if (cartOfUser.Cart.SingleOrDefault(p => p.ID == idPro) == null)
             {
                 ProductInCart productInCart = new ProductInCart { ID = idPro, Name = name, Price = price, Quantity = quantity };
@@ -68,6 +80,21 @@ namespace ShopAPI.Controllers
                     cartOfUser.Cart.Remove(productInCart);
                     return Ok(cartOfUser);
                 }
+            }
+            return BadRequest();
+        }
+
+        [HttpPut("changeUser")]
+        public ActionResult<CartObj> updateUserID([FromBody] Dictionary<string, string> body)
+        {
+            var oldUser = body.GetValueOrDefault("old_id");
+            var newUser = body.GetValueOrDefault("new_id");
+
+            var cartOfUser = carts.SingleOrDefault(cart => cart.accId == oldUser);
+            if (cartOfUser != null)
+            {
+                cartOfUser.accId = newUser;
+                return Ok(cartOfUser);
             }
             return BadRequest();
         }
