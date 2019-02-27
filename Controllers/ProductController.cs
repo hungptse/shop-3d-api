@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using ShopAPI.Entities;
 
 namespace ShopAPI.Controllers
@@ -18,8 +19,9 @@ namespace ShopAPI.Controllers
         // GET: api/Product
         [HttpGet]
         public IEnumerable<Product> GetProduct()
-        {
-            return _context.Product;
+        {            
+            return _context.Product.
+                Select(p => new Product{ Id = p.Id, Name = p.Name, Price = p.Price, Description = p.Description, Cate = p.Cate  });
         }
 
         // GET: api/Product/5
@@ -37,7 +39,6 @@ namespace ShopAPI.Controllers
             {
                 return NotFound();
             }
-
             return Ok(product);
         }
 

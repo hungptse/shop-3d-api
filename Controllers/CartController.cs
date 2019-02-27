@@ -28,12 +28,13 @@ namespace ShopAPI.Controllers
             {
                 return Ok(cartOfUser);
             }
-            else
-            {
-                CartObj cartNewUser = new CartObj(userId);
-                carts.Add(cartNewUser);
-                return Ok(cartNewUser);
-            }
+            //else
+            //{
+            //    CartObj cartNewUser = new CartObj(userId);
+            //    carts.Add(cartNewUser);
+            //    return Ok(cartNewUser);
+            //}
+            return BadRequest();
         }
 
         [HttpPost("{userId}")]
@@ -90,11 +91,22 @@ namespace ShopAPI.Controllers
             var oldUser = body.GetValueOrDefault("old_id");
             var newUser = body.GetValueOrDefault("new_id");
 
-            var cartOfUser = carts.SingleOrDefault(cart => cart.accId == oldUser);
-            if (cartOfUser != null)
+            var cartOfOld = carts.SingleOrDefault(cart => cart.accId == oldUser);
+            var cartOfNew = carts.SingleOrDefault(cart => cart.accId == newUser);
+
+            if (cartOfOld != null && cartOfNew != null)
             {
-                cartOfUser.accId = newUser;
-                return Ok(cartOfUser);
+                return NoContent();
+            }
+            else if (cartOfNew != null)
+            {
+                return Ok(cartOfNew);
+            }
+            else if (cartOfOld != null)
+            {
+                cartOfNew.Cart = cartOfOld.Cart;
+                carts.Remove(cartOfOld);
+                return Ok(cartOfNew);
             }
             return BadRequest();
         }

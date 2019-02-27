@@ -15,9 +15,9 @@ namespace ShopAPI.Helpers
         private static string ISSUER = "3dmodel.com";
         private static string AUDIENCE = "3dmodel.com";
 
-        public static string GetTokenFromUser(string username)
+        public static string GetTokenFromUser(string username, string role)
         {
-            var claimsData = new[] { new Claim("sub", username) };
+            var claimsData = new[] { new Claim("sub", username), new Claim("role",role) };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SECRET));
             var signInCred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
             var tokenString = new JwtSecurityToken(

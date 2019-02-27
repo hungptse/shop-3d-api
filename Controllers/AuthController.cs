@@ -29,7 +29,7 @@ namespace ShopAPI.Controllers
             {
                 if (PasswordEncrypt.Verify(password, account.Password))
                 {
-                    Response.Headers.TryAdd("Authorization", TokenServices.GetTokenFromUser(username));
+                    Response.Headers.TryAdd("Authorization", TokenServices.GetTokenFromUser(username, account.Role.Name));
                     Response.Headers.Add("Access-Control-Expose-Headers", "Authorization");
                     return Ok();
                     

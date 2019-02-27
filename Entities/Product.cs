@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace ShopAPI.Entities
 {
+    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
     public partial class Product
     {
         public Product()
