@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace ShopAPI.Entities
 {
@@ -25,10 +26,20 @@ namespace ShopAPI.Entities
         public int? Quantity { get; set; }
         public int? Qrid { get; set; }
 
+        [JsonIgnore]
+        [IgnoreDataMember]
         public Category Cate { get; set; }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public Qr Qr { get; set; }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public ICollection<Feedback> Feedback { get; set; }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public ICollection<Image> Image { get; set; }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public ICollection<OrderDetail> OrderDetail { get; set; }
     }
 }
