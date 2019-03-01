@@ -21,7 +21,7 @@ namespace ShopAPI.Controllers
         public IEnumerable<Product> GetProduct()
         {            
             return _context.Product.
-                Select(p => new Product{ Id = p.Id, Name = p.Name, Price = p.Price, Description = p.Description, Cate = p.Cate  });
+                Select(p => new Product{ Id = p.Id, Name = p.Name, Price = p.Price, Description = p.Description, Cate = p.Cate, Model = p.Model  });
         }
 
         // GET: api/Product/5
