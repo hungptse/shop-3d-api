@@ -20,20 +20,19 @@ namespace ShopAPI.Controllers
         [HttpGet]
         public IEnumerable<Product> GetProduct()
         {            
-            return _context.Product.
-                Select(p => new Product{ Id = p.Id, Name = p.Name, Price = p.Price, Description = p.Description, Cate = p.Cate, Model = p.Model  });
+            return _context.Product;
         }
 
         // GET: api/Product/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetProduct([FromRoute] int id)
+        public  IActionResult GetProduct([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var product = await _context.Product.FindAsync(id);
+            var product =  _context.Product.Include(p => p.Image).SingleOrDefault(p => p.Id == id);
 
             if (product == null)
             {

@@ -25,6 +25,7 @@ namespace ShopAPI.Entities
         public double? Price { get; set; }
         public int? Quantity { get; set; }
         public int? Qrid { get; set; }
+        public string Thumbnail { get; set; }
 
         [JsonIgnore]
         [IgnoreDataMember]

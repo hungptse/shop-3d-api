@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
+﻿using Microsoft.AspNetCore.Mvc;
 using ShopAPI.Entities;
 using ShopAPI.Helpers;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShopAPI.Controllers
 {
@@ -32,10 +25,10 @@ namespace ShopAPI.Controllers
                     Response.Headers.TryAdd("Authorization", TokenServices.GetTokenFromUser(username, _context.Role.SingleOrDefault(el => el.Id == account.RoleId).Name));
                     Response.Headers.Add("Access-Control-Expose-Headers", "Authorization");
                     return Ok();
-                    
+
                 }
             }
-            return BadRequest();   
+            return BadRequest();
         }
 
 

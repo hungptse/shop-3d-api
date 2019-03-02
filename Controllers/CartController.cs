@@ -61,7 +61,7 @@ namespace ShopAPI.Controllers
             else
             {
                 ProductInCart productInCart = cartOfUser.Cart.SingleOrDefault(p => p.ID == idPro);
-                productInCart.Quantity++;
+                productInCart.Quantity += quantity;
             }
             return Ok(cartOfUser);
 
