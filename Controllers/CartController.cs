@@ -12,6 +12,7 @@ namespace ShopAPI.Controllers
     {
 
         private static List<CartObj> carts = new List<CartObj>();
+        private WebsiteShoppingContext context = new WebsiteShoppingContext();
 
         [HttpGet]
         public ActionResult<CartObj> GetAllCart()
@@ -45,23 +46,33 @@ namespace ShopAPI.Controllers
             var quantity = int.Parse(body.GetValueOrDefault("quantity"));
             var price = float.Parse(body.GetValueOrDefault("price"));
             var name = body.GetValueOrDefault("name");
+            var thumbnail = body.GetValueOrDefault("thumbnail");
             if (cartOfUser == null)
             {
                 CartObj cartNewUser = new CartObj(userId);
-                cartNewUser.Cart.Add(new ProductInCart { ID = idPro, Name = name, Price = price, Quantity = quantity });
+                cartNewUser.Cart.Add(new ProductInCart { ID = idPro, Name = name, Price = price, Quantity = quantity, Thumbnail = thumbnail });
                 carts.Add(cartNewUser);
                 return Ok(cartNewUser);
             }
 
             if (cartOfUser.Cart.SingleOrDefault(p => p.ID == idPro) == null)
             {
-                ProductInCart productInCart = new ProductInCart { ID = idPro, Name = name, Price = price, Quantity = quantity };
+                ProductInCart productInCart = new ProductInCart { ID = idPro, Name = name, Price = price, Quantity = quantity, Thumbnail = thumbnail };
                 cartOfUser.Cart.Add(productInCart);
             }
             else
             {
                 ProductInCart productInCart = cartOfUser.Cart.SingleOrDefault(p => p.ID == idPro);
-                productInCart.Quantity += quantity;
+                var newQty = productInCart.Quantity + quantity;
+                var stock = context.Product.SingleOrDefault(p => p.Id == idPro).Quantity;
+                if (newQty >= stock)
+                {
+                    productInCart.Quantity = int.Parse(stock + "");
+                }
+                else
+                {
+                    productInCart.Quantity += quantity;
+                }
             }
             return Ok(cartOfUser);
 
