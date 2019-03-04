@@ -1,12 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using ShopAPI.Entities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using ShopAPI.Entities;
 
 namespace ShopAPI.Controllers
 {
@@ -19,20 +16,20 @@ namespace ShopAPI.Controllers
         // GET: api/Product
         [HttpGet]
         public IEnumerable<Product> GetProduct()
-        {            
+        {
             return _context.Product;
         }
 
         // GET: api/Product/5
         [HttpGet("{id}")]
-        public  IActionResult GetProduct([FromRoute] int id)
+        public IActionResult GetProduct([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var product =  _context.Product.Include(p => p.Image).SingleOrDefault(p => p.Id == id);
+            var product = _context.Product.Include(p => p.Image).SingleOrDefault(p => p.Id == id);
 
             if (product == null)
             {
@@ -78,31 +75,21 @@ namespace ShopAPI.Controllers
 
         // POST: api/Product
         [HttpPost]
-        public async Task<IActionResult> PostProduct([FromBody] Product product)
+        public IActionResult PostProduct([FromBody] Dictionary<string, string> body)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            _context.Product.Add(product);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (ProductExists(product.Id))
-                {
-                    return new StatusCodeResult(StatusCodes.Status409Conflict);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtAction("GetProduct", new { id = product.Id }, product);
+            var name = body.GetValueOrDefault("name");
+            var model = body.GetValueOrDefault("model");
+            var cate = body.GetValueOrDefault("cate");
+            var description = body.GetValueOrDefault("description");
+            var height = body.GetValueOrDefault("height");
+            var weight = body.GetValueOrDefault("weight");
+            var price = body.GetValueOrDefault("price");
+            var quantity = body.GetValueOrDefault("quantity");
+            var imgThumb = body.GetValueOrDefault("imgThumb");
+            var p = new Product { Name = name, Model = model, CateId = int.Parse(cate), Description = description, Height = double.Parse(height), Weight = double.Parse(weight), Price = double.Parse(price), Quantity = int.Parse(quantity), Thumbnail = imgThumb };
+            _context.Product.Add(p);
+            _context.SaveChanges();
+            return Ok();
         }
 
         // DELETE: api/Product/5

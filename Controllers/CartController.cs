@@ -107,17 +107,32 @@ namespace ShopAPI.Controllers
 
             if (cartOfOld != null && cartOfNew != null)
             {
-                return NoContent();
-            }
-            else if (cartOfNew != null)
-            {
-                return Ok(cartOfNew);
-            }
-            else if (cartOfOld != null)
-            {
-                cartOfNew.Cart = cartOfOld.Cart;
+                //cartOfNew.Cart.Concat(cartOfOld.Cart);
+                foreach (var product in cartOfOld.Cart)
+                {
+                    var isExistedProduct = cartOfNew.Cart.SingleOrDefault(p => p.ID == product.ID);
+                    if (isExistedProduct != null)
+                    {
+                        cartOfNew.Cart.Add(product);
+                    } else
+                    {
+                        isExistedProduct.Quantity += product.Quantity;
+                    }
+                }
                 carts.Remove(cartOfOld);
                 return Ok(cartOfNew);
+            }
+            else if (cartOfNew != null && cartOfOld == null)
+            {
+                return Ok(cartOfNew);
+            }
+            else if (cartOfOld != null && cartOfNew == null)
+            {
+                CartObj cartNew = new CartObj(newUser);
+                cartNew.Cart = cartOfOld.Cart;
+                carts.Remove(cartOfOld);
+                carts.Add(cartNew);
+                return Ok(cartNew);
             }
             return BadRequest();
         }

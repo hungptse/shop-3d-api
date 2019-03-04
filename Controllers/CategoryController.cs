@@ -22,6 +22,12 @@ namespace ShopAPI.Controllers
             return _context.Category.Include(c => c.Product);
         }
 
+        [HttpGet("name")]
+        public IEnumerable<Category> GetCategoryName()
+        {
+            return _context.Category.Select(c => new Category { Id = c.Id, Name = c.Name });
+        }
+
         // GET: api/Category/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCategory([FromRoute] int id)
