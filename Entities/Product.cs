@@ -27,8 +27,8 @@ namespace ShopAPI.Entities
         public int? Qrid { get; set; }
         public string Thumbnail { get; set; }
 
-        [JsonIgnore]
-        [IgnoreDataMember]
+        //[JsonIgnore]
+        //[IgnoreDataMember]
         public Category Cate { get; set; }
         [JsonIgnore]
         [IgnoreDataMember]

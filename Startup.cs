@@ -5,10 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using ShopAPI.Helpers;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ShopAPI
 {
@@ -25,6 +23,10 @@ namespace ShopAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+       .AddJsonOptions(
+           options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+       );
             services.AddCors();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
@@ -37,10 +39,10 @@ namespace ShopAPI
                     ValidAudience = "3dmodel.com",
                     ValidIssuer = "3dmodel.com",
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("3D_MODEL_HUNGPT_FUHCM"))
-            };
+                };
             });
 
-        
+
 
             services.AddSwaggerGen(c =>
             {

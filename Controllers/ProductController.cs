@@ -17,7 +17,7 @@ namespace ShopAPI.Controllers
         [HttpGet]
         public IEnumerable<Product> GetProduct()
         {
-            return _context.Product;
+            return _context.Product.Include(p => p.Cate);
         }
 
         // GET: api/Product/5

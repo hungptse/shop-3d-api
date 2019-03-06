@@ -16,8 +16,8 @@ namespace ShopAPI.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        [JsonIgnore]
-        [IgnoreDataMember]
+        //[JsonIgnore]
+        //[IgnoreDataMember]
         public ICollection<Product> Product { get; set; }
     }
 }
