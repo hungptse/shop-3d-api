@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using ShopAPI.Entities;
+using ShopAPI.Hubs;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,7 +13,14 @@ namespace ShopAPI.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
+
         private WebsiteShoppingContext _context = new WebsiteShoppingContext();
+        private IHubContext<ProductHub> hub;
+        public ProductController(IHubContext<ProductHub> hub)
+        {
+            this.hub = hub;
+        }
+
 
         // GET: api/Product
         [HttpGet]
@@ -75,8 +84,9 @@ namespace ShopAPI.Controllers
 
         // POST: api/Product
         [HttpPost]
-        public IActionResult PostProduct([FromBody] Dictionary<string, string> body)
+        public async Task<IActionResult> PostProduct([FromBody] Dictionary<string, string> body)
         {
+
             var name = body.GetValueOrDefault("name");
             var model = body.GetValueOrDefault("model");
             var cate = body.GetValueOrDefault("cate");
@@ -89,6 +99,7 @@ namespace ShopAPI.Controllers
             var p = new Product { Name = name, Model = model, CateId = int.Parse(cate), Description = description, Height = double.Parse(height), Weight = double.Parse(weight), Price = double.Parse(price), Quantity = int.Parse(quantity), Thumbnail = imgThumb };
             _context.Product.Add(p);
             _context.SaveChanges();
+            await hub.Clients.All.SendAsync("Add", _context.Product.Include(pro => pro.Image).Include(pro => pro.Cate).SingleOrDefault(pro => pro.Id == p.Id));
             return Ok();
         }
 

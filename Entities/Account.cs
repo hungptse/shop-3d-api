@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace ShopAPI.Entities
@@ -11,6 +12,8 @@ namespace ShopAPI.Entities
         }
 
         public string Username { get; set; }
+
+        [JsonIgnore]
         public string Password { get; set; }
         public string Name { get; set; }
         public bool? Gender { get; set; }
@@ -20,6 +23,8 @@ namespace ShopAPI.Entities
         public int? RoleId { get; set; }
         public DateTime? CreateAt { get; set; }
         public string AvatarUrl { get; set; }
+        public string Phone { get; set; }
+
 
         public Role Role { get; set; }
         public ICollection<Order> Order { get; set; }

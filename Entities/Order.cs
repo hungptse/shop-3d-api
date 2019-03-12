@@ -15,6 +15,8 @@ namespace ShopAPI.Entities
         public double? Total { get; set; }
         public int? Status { get; set; }
         public string UserId { get; set; }
+        public string Note { get; set; }
+
 
         public StatusOrder StatusNavigation { get; set; }
         public Account User { get; set; }

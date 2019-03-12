@@ -19,21 +19,32 @@ namespace ShopAPI.Controllers
     public class AccountController : ControllerBase
     {
 
-        private WebsiteShoppingContext context = new WebsiteShoppingContext();
+        private WebsiteShoppingContext _context = new WebsiteShoppingContext();
        
         // GET api/values
         [HttpGet]
         [Authorize]
         public ActionResult<IEnumerable<Account>> Get()
         {
-            return context.Account.ToArray();
+            return _context.Account.ToArray();
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public IActionResult Get(string id)
         {
-            return "value";
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var product = _context.Account.SingleOrDefault(a => a.Username == id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return Ok(product);
         }
 
         // POST api/values

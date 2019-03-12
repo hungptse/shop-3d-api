@@ -101,7 +101,7 @@ namespace ShopAPI.Entities
 
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.CreatedTime).HasColumnType("datetime");
 
@@ -120,6 +120,8 @@ namespace ShopAPI.Entities
 
             modelBuilder.Entity<OrderDetail>(entity =>
             {
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderDetail)
                     .HasForeignKey(d => d.OrderId)
