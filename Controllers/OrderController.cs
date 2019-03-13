@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using ShopAPI.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShopAPI.Controllers
 {
@@ -15,14 +14,26 @@ namespace ShopAPI.Controllers
     {
 
         private WebsiteShoppingContext _context = new WebsiteShoppingContext();
+
+        [HttpGet]
+        public IEnumerable<Order> GetOrders()
+        {
+            return _context.Order.Include(o => o.User).Include(o => o.OrderDetail).ThenInclude(d => d.Pro);
+        }
+
+
+
         [HttpPost("checkout")]
         public ActionResult CheckoutOrder([FromBody] Dictionary<string, dynamic> body)
         {
             string username = body.GetValueOrDefault("userId");
             string note = body.GetValueOrDefault("note");
             double total = body.GetValueOrDefault("total");
-
-            Order order = new Order {Note = note, UserId = username, CreatedTime = DateTime.Now, Status = 1, Total = total };
+            if (note.Equals(""))
+            {
+                note = "None";
+            }
+            Order order = new Order { Note = note, UserId = username, CreatedTime = DateTime.Now, Status = 1, Total = total };
             _context.Order.Add(order);
             _context.SaveChanges();
             JArray products = body.GetValueOrDefault("products");
@@ -38,5 +49,7 @@ namespace ShopAPI.Controllers
             }
             return Ok();
         }
+
+        
     }
 }
