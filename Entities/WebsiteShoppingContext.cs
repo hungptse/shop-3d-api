@@ -22,7 +22,6 @@ namespace ShopAPI.Entities
         public virtual DbSet<Order> Order { get; set; }
         public virtual DbSet<OrderDetail> OrderDetail { get; set; }
         public virtual DbSet<Product> Product { get; set; }
-        public virtual DbSet<Qr> Qr { get; set; }
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<StatusOrder> StatusOrder { get; set; }
 
@@ -79,14 +78,20 @@ namespace ShopAPI.Entities
 
             modelBuilder.Entity<Feedback>(entity =>
             {
-                entity.Property(e => e.Email).HasMaxLength(50);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.UserId).HasMaxLength(50);
 
-                entity.Property(e => e.Name).HasMaxLength(50);
+                entity.Property(e => e.PostedTime).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Pro)
                     .WithMany(p => p.Feedback)
                     .HasForeignKey(d => d.ProId)
                     .HasConstraintName("FK_Feedback_Product");
+
+                entity.HasOne(d => d.Acc)
+                    .WithMany(p => p.Feedback)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Feedback_Account");
             });
 
             modelBuilder.Entity<Image>(entity =>
@@ -145,34 +150,14 @@ namespace ShopAPI.Entities
 
                 entity.Property(e => e.Name).HasMaxLength(50);
 
-                entity.Property(e => e.Qrid).HasColumnName("QRID");
 
                 entity.HasOne(d => d.Cate)
                     .WithMany(p => p.Product)
                     .HasForeignKey(d => d.CateId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Product_Category");
-
-                entity.HasOne(d => d.Qr)
-                    .WithMany(p => p.Product)
-                    .HasForeignKey(d => d.Qrid)
-                    .HasConstraintName("FK_Product_QR");
             });
 
-            modelBuilder.Entity<Qr>(entity =>
-            {
-                entity.ToTable("QR");
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.Property(e => e.LinkAr)
-                    .HasColumnName("LinkAR")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.LinkQr)
-                    .HasColumnName("LinkQR")
-                    .HasMaxLength(50);
-            });
 
             modelBuilder.Entity<Role>(entity =>
             {

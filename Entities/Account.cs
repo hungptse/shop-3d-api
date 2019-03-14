@@ -28,5 +28,6 @@ namespace ShopAPI.Entities
 
         public Role Role { get; set; }
         public ICollection<Order> Order { get; set; }
+        public ICollection<Feedback> Feedback { get; set; }
     }
 }

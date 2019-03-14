@@ -38,7 +38,7 @@ namespace ShopAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var product = _context.Product.Include(p => p.Image).SingleOrDefault(p => p.Id == id);
+            var product = _context.Product.Include(f => f.Feedback).ThenInclude(a => a.Acc).Include(p => p.Image).SingleOrDefault(p => p.Id == id);
 
             if (product == null)
             {

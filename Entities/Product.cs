@@ -24,17 +24,14 @@ namespace ShopAPI.Entities
         public int? CateId { get; set; }
         public double? Price { get; set; }
         public int? Quantity { get; set; }
-        public int? Qrid { get; set; }
         public string Thumbnail { get; set; }
 
         //[JsonIgnore]
         //[IgnoreDataMember]
         public Category Cate { get; set; }
-        [JsonIgnore]
-        [IgnoreDataMember]
-        public Qr Qr { get; set; }
-        [JsonIgnore]
-        [IgnoreDataMember]
+        
+        //[JsonIgnore]
+        //[IgnoreDataMember]
         public ICollection<Feedback> Feedback { get; set; }
         [JsonIgnore]
         [IgnoreDataMember]
