@@ -19,7 +19,7 @@ namespace ShopAPI.Controllers
         [HttpGet]
         public IEnumerable<Feedback> GetFeedback()
         {
-            return _context.Feedback.Include(f => f.Acc);
+            return _context.Feedback.Include(f => f.Acc).Include(f => f.Pro);
         }
 
         // GET: api/Feedback/5
@@ -43,35 +43,21 @@ namespace ShopAPI.Controllers
 
         // PUT: api/Feedback/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutFeedback([FromRoute] int id, [FromBody] Feedback feedback)
+        public async Task<IActionResult> ChangeStatusFeedBack([FromRoute] int id, [FromBody] Dictionary<string, string> body)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != feedback.Id)
+            Feedback feedback = _context.Feedback.SingleOrDefault(f => f.Id == id);
+            if (feedback == null)
             {
                 return BadRequest();
             }
 
-            _context.Entry(feedback).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!FeedbackExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            feedback.isApprove = bool.Parse(body.GetValueOrDefault("status"));
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }

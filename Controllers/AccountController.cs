@@ -53,10 +53,27 @@ namespace ShopAPI.Controllers
         {
         }
 
-        // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> UpdateProfile([FromRoute] string id, [FromBody] Dictionary<string, string> body)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            Account account = _context.Account.SingleOrDefault(a => a.Username.Equals(id));
+            if (account == null)
+            {
+                return BadRequest();
+            }
+
+            account.Name = body.GetValueOrDefault("name");
+            account.Gender = bool.Parse(body.GetValueOrDefault("gender"));
+            account.BirthDate = DateTime.Parse(body.GetValueOrDefault("birthdate"));
+            account.Email = body.GetValueOrDefault("email");
+            account.Phone = body.GetValueOrDefault("phone");
+            account.Address = body.GetValueOrDefault("address");
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
 
         // DELETE api/values/5

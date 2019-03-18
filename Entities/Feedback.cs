@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace ShopAPI.Entities
 {
@@ -16,6 +17,8 @@ namespace ShopAPI.Entities
         public DateTime? PostedTime { get; set; }
 
         public Product Pro { get; set; }
+        //[JsonIgnore]
+        //[IgnoreDataMember]
         public Account Acc { get; set; }
     }
 }

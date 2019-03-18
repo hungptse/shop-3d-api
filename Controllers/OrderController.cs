@@ -21,8 +21,6 @@ namespace ShopAPI.Controllers
             return _context.Order.Include(o => o.User).Include(o => o.OrderDetail).ThenInclude(d => d.Pro);
         }
 
-
-
         [HttpPost("checkout")]
         public ActionResult CheckoutOrder([FromBody] Dictionary<string, dynamic> body)
         {
@@ -50,6 +48,22 @@ namespace ShopAPI.Controllers
             return Ok();
         }
 
-        
+        [HttpPut("change/{id}/status/{status}")]
+        public ActionResult ChangeStatus([FromRoute] int id,[FromRoute] int status)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            Order order = _context.Order.SingleOrDefault(o => o.Id == id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+            order.Status = status;
+            _context.SaveChanges();
+
+            return NoContent();
+        }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using ShopAPI.Entities;
 using ShopAPI.Hubs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,6 +30,7 @@ namespace ShopAPI.Controllers
             return _context.Product.Include(p => p.Cate);
         }
 
+
         // GET: api/Product/5
         [HttpGet("{id}")]
         public IActionResult GetProduct([FromRoute] int id)
@@ -45,6 +47,33 @@ namespace ShopAPI.Controllers
                 return NotFound();
             }
             return Ok(product);
+        }
+
+        [HttpGet("rate/{id}")]
+        public IActionResult GetProductRate([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var product = _context.Product.SingleOrDefault(p => p.Id == id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+            List<Feedback> feedbacks = _context.Feedback.Where(f => f.ProId == id && f.isApprove == true).ToList();
+            double? sum = 0;
+            foreach (var feedback in feedbacks)
+            {
+                sum += feedback.Rate;
+            }
+            if (feedbacks.Count == 0)
+            {
+                return Ok(5);
+            }
+            double? rating = sum / feedbacks.Count;
+            return Ok(rating);
         }
 
         // PUT: api/Product/5
