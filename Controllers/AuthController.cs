@@ -3,6 +3,7 @@ using ShopAPI.Entities;
 using ShopAPI.Helpers;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ShopAPI.Controllers
 {
@@ -28,6 +29,31 @@ namespace ShopAPI.Controllers
 
                 }
             }
+            return BadRequest();
+        }
+
+        [HttpPut("change_password")]
+        public async Task<IActionResult> UpdatePassword([FromBody] Dictionary<string, string> body)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            string username = body.GetValueOrDefault("username");
+            string password = body.GetValueOrDefault("password");
+
+            Account account = _context.Account.SingleOrDefault(element => element.Username == username);
+            if (account != null)
+            {
+                if (PasswordEncrypt.Verify(password, account.Password))
+                {
+                    account.Password = PasswordEncrypt.Encrypt(body.GetValueOrDefault("newPassword"));
+                    await _context.SaveChangesAsync();
+                    return Ok();
+
+                }
+            }
+            
             return BadRequest();
         }
 

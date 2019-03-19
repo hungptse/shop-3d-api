@@ -48,10 +48,7 @@ namespace ShopAPI.Controllers
         }
 
         // POST api/values
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
+       
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProfile([FromRoute] string id, [FromBody] Dictionary<string, string> body)
