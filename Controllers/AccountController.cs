@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace ShopAPI.Controllers
 {
@@ -38,13 +39,13 @@ namespace ShopAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var product = _context.Account.SingleOrDefault(a => a.Username == id);
-
-            if (product == null)
+            var account = _context.Account.Where(a => a.Username == id).FirstOrDefault();
+            //Include(a => a.Feedback).Include(a => a.Order)
+            if (account == null)
             {
                 return NotFound();
             }
-            return Ok(product);
+            return Ok(account);
         }
 
         // POST api/values

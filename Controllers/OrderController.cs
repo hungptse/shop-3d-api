@@ -21,6 +21,32 @@ namespace ShopAPI.Controllers
             return _context.Order.Include(o => o.User).Include(o => o.OrderDetail).ThenInclude(d => d.Pro);
         }
 
+
+        [HttpGet("detail/{id}")]
+        public IActionResult GetOrderDetailById(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            //var orderDetail = _context.OrderDetail.Where(d => d.OrderId == id).Include(d => d.Pro).ToList();
+            var orderDetail = _context.Order.Where(o => o.Id == id).Include(o => o.OrderDetail).ThenInclude(d => d.Pro).FirstOrDefault();
+
+            if (orderDetail == null)
+            {
+                return NotFound();
+            }
+            return Ok(orderDetail);
+        }
+   
+
+        [HttpGet("{uid}")]
+        public IEnumerable<Order> GetOrderOfUser([FromRoute] String uid)
+        {
+            return _context.Order.Where(o => o.UserId == uid).Include(o => o.OrderDetail).ThenInclude(d => d.Pro);
+        }
+
         [HttpPost("checkout")]
         public ActionResult CheckoutOrder([FromBody] Dictionary<string, dynamic> body)
         {

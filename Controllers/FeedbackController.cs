@@ -19,7 +19,7 @@ namespace ShopAPI.Controllers
         [HttpGet]
         public IEnumerable<Feedback> GetFeedback()
         {
-            return _context.Feedback.Include(f => f.Acc).Include(f => f.Pro);
+            return _context.Feedback.Include(f => f.Acc).Include(f => f.Pro);   
         }
 
         // GET: api/Feedback/5
@@ -32,6 +32,24 @@ namespace ShopAPI.Controllers
             }
 
             var feedback = await _context.Feedback.FindAsync(id);
+
+            if (feedback == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(feedback);
+        }
+
+        [HttpGet("user/{username}")]
+        public async Task<IActionResult> GetFeedbackByUsername([FromRoute] string username)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var feedback = await _context.Feedback.Include(f => f.Pro).Where(f => f.UserId == username).ToListAsync();
 
             if (feedback == null)
             {
@@ -82,26 +100,7 @@ namespace ShopAPI.Controllers
             return CreatedAtAction("GetFeedback", new { id = feedback.Id }, feedback);
         }
 
-        // DELETE: api/Feedback/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteFeedback([FromRoute] int id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var feedback = await _context.Feedback.FindAsync(id);
-            if (feedback == null)
-            {
-                return NotFound();
-            }
-
-            _context.Feedback.Remove(feedback);
-            await _context.SaveChangesAsync();
-
-            return Ok(feedback);
-        }
+       
 
         private bool FeedbackExists(int id)
         {
