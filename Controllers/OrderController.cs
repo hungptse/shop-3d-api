@@ -44,7 +44,7 @@ namespace ShopAPI.Controllers
         [HttpGet("{uid}")]
         public IEnumerable<Order> GetOrderOfUser([FromRoute] String uid)
         {
-            return _context.Order.Where(o => o.UserId == uid).Include(o => o.OrderDetail).ThenInclude(d => d.Pro);
+            return _context.Order.Where(o => o.UserId == uid).Include(o => o.OrderDetail).ThenInclude(d => d.Pro).OrderByDescending(d => d.CreatedTime);
         }
 
         [HttpPost("checkout")]

@@ -49,7 +49,7 @@ namespace ShopAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var feedback = await _context.Feedback.Include(f => f.Pro).Where(f => f.UserId == username).ToListAsync();
+            var feedback = await _context.Feedback.Include(f => f.Pro).Where(f => f.UserId == username).OrderByDescending(f => f.PostedTime).ToListAsync();
 
             if (feedback == null)
             {
@@ -100,11 +100,5 @@ namespace ShopAPI.Controllers
             return CreatedAtAction("GetFeedback", new { id = feedback.Id }, feedback);
         }
 
-       
-
-        private bool FeedbackExists(int id)
-        {
-            return _context.Feedback.Any(e => e.Id == id);
-        }
     }
 }

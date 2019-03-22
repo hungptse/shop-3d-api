@@ -132,26 +132,6 @@ namespace ShopAPI.Controllers
             return Ok();
         }
 
-        // DELETE: api/Product/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduct([FromRoute] int id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var product = await _context.Product.FindAsync(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            _context.Product.Remove(product);
-            await _context.SaveChangesAsync();
-
-            return Ok(product);
-        }
 
         private bool ProductExists(int id)
         {
