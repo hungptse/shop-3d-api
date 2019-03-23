@@ -17,6 +17,7 @@ namespace ShopAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AccountController : ControllerBase
     {
 
@@ -24,10 +25,9 @@ namespace ShopAPI.Controllers
        
         // GET api/values
         [HttpGet]
-        [Authorize]
         public ActionResult<IEnumerable<Account>> Get()
         {
-            return _context.Account.ToArray();
+            return _context.Account.Include(a => a.Feedback).Include(a => a.Order).ToList();
         }
 
         // GET api/values/5

@@ -19,7 +19,7 @@ namespace ShopAPI.Controllers
         [HttpGet]
         public IEnumerable<Feedback> GetFeedback()
         {
-            return _context.Feedback.Include(f => f.Acc).Include(f => f.Pro);   
+            return _context.Feedback.Include(f => f.Acc).Include(f => f.Pro).OrderByDescending(f => f.PostedTime);   
         }
 
         // GET: api/Feedback/5

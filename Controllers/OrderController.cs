@@ -18,7 +18,7 @@ namespace ShopAPI.Controllers
         [HttpGet]
         public IEnumerable<Order> GetOrders()
         {
-            return _context.Order.Include(o => o.User).Include(o => o.OrderDetail).ThenInclude(d => d.Pro);
+            return _context.Order.Include(o => o.User).Include(o => o.OrderDetail).ThenInclude(d => d.Pro).OrderByDescending(d => d.CreatedTime);
         }
 
 
