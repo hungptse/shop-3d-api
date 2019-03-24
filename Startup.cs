@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using ShopAPI.Hubs;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Text;
 
@@ -43,7 +42,6 @@ namespace ShopAPI
                 };
             });
 
-            services.AddSignalR();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "Shop API", Version = "v1" });
@@ -71,12 +69,6 @@ namespace ShopAPI
 
             app.UseAuthentication();
             app.UseMvc();
-
-            app.UseSignalR(routes =>
-            {
-                routes.MapHub<ProductHub>("/hub/product");
-            });
-
 
             app.UseSwagger();
             app.UseSwaggerUI(config =>

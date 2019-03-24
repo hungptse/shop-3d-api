@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,12 +12,14 @@ namespace ShopAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class FeedbackController : ControllerBase
     {
         private WebsiteShoppingContext _context = new WebsiteShoppingContext();
 
         // GET: api/Feedback
         [HttpGet]
+        [AllowAnonymous]
         public IEnumerable<Feedback> GetFeedback()
         {
             return _context.Feedback.Include(f => f.Acc).Include(f => f.Pro).OrderByDescending(f => f.PostedTime);   

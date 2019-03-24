@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ShopAPI.Entities;
 using ShopAPI.Helpers;
 using System.Collections.Generic;
@@ -8,10 +9,13 @@ using System.Threading.Tasks;
 namespace ShopAPI.Controllers
 {
     [Route("[controller]")]
+    [Authorize]
+    [ApiController]
     public class AuthController : Controller
     {
         private WebsiteShoppingContext _context = new WebsiteShoppingContext();
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public ActionResult Token([FromBody] Dictionary<string, string> body)
         {

@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShopAPI.Entities;
-using ShopAPI.Hubs;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,19 +10,16 @@ namespace ShopAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductController : ControllerBase
     {
 
         private WebsiteShoppingContext _context = new WebsiteShoppingContext();
-        private IHubContext<ProductHub> hub;
-        public ProductController(IHubContext<ProductHub> hub)
-        {
-            this.hub = hub;
-        }
 
 
         // GET: api/Product
         [HttpGet]
+        [AllowAnonymous]
         public IEnumerable<Product> GetProduct()
         {
             return _context.Product.Include(p => p.Cate);
@@ -32,6 +28,7 @@ namespace ShopAPI.Controllers
 
         // GET: api/Product/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public IActionResult GetProduct([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -49,6 +46,7 @@ namespace ShopAPI.Controllers
         }
 
         [HttpGet("rate/{id}")]
+        [AllowAnonymous]
         public IActionResult GetProductRate([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -130,8 +128,7 @@ namespace ShopAPI.Controllers
             var imgThumb = body.GetValueOrDefault("imgThumb");
             var p = new Product { Name = name, Model = model, CateId = int.Parse(cate), Description = description, Height = double.Parse(height), Weight = double.Parse(weight), Price = double.Parse(price), Quantity = int.Parse(quantity), Thumbnail = imgThumb };
             _context.Product.Add(p);
-            _context.SaveChanges();
-            await hub.Clients.All.SendAsync("Add", _context.Product.Include(pro => pro.Image).Include(pro => pro.Cate).SingleOrDefault(pro => pro.Id == p.Id));
+            await _context.SaveChangesAsync();
             return Ok();
         }
 

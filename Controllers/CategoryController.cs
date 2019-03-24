@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,11 +12,12 @@ namespace ShopAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CategoryController : ControllerBase
     {
         private WebsiteShoppingContext _context = new WebsiteShoppingContext();
 
-        // GET: api/Category
+        [AllowAnonymous]
         [HttpGet]
         public IEnumerable<Category> GetCategory()
         {
@@ -28,7 +30,6 @@ namespace ShopAPI.Controllers
             return _context.Category.Select(c => new Category { Id = c.Id, Name = c.Name });
         }
 
-        // GET: api/Category/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCategory([FromRoute] int id)
         {
@@ -47,7 +48,6 @@ namespace ShopAPI.Controllers
             return Ok(category);
         }
 
-        // PUT: api/Category/5
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateNameCate([FromRoute] int id,[FromBody] Dictionary<string, string> body)
         {

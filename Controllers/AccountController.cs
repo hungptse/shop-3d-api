@@ -74,6 +74,23 @@ namespace ShopAPI.Controllers
             return NoContent();
         }
 
-       
+        [AllowAnonymous]
+        [HttpGet("check/{username}")]
+        public IActionResult checkDuplicate(string username)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var account = _context.Account.Where(a => a.Username == username).FirstOrDefault();
+            //Include(a => a.Feedback).Include(a => a.Order)
+            if (account == null)
+            {
+                return NotFound();
+            }
+            return Ok();
+        }
+
     }
 }
