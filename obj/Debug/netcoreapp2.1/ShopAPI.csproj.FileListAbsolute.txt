@@ -12,3 +12,4 @@ D:\C#-PRN292\ShopAPI\ShopAPI\obj\Debug\netcoreapp2.1\ShopAPI.RazorTargetAssembly
 D:\C#-PRN292\ShopAPI\ShopAPI\obj\Debug\netcoreapp2.1\ShopAPI.dll
 D:\C#-PRN292\ShopAPI\ShopAPI\obj\Debug\netcoreapp2.1\ShopAPI.pdb
 D:\C#-PRN292\ShopAPI\ShopAPI\obj\Debug\netcoreapp2.1\ShopAPI.csprojAssemblyReference.cache
+D:\C#-PRN292\ShopAPI\ShopAPI\obj\Debug\netcoreapp2.1\UserSecretsAssemblyInfo.cs

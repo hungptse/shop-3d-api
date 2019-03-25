@@ -1,0 +1,15 @@
+D:\C#-PRN292\ShopAPI\ShopAPI\bin\Release\netcoreapp2.1\ShopAPI.deps.json
+D:\C#-PRN292\ShopAPI\ShopAPI\bin\Release\netcoreapp2.1\ShopAPI.runtimeconfig.json
+D:\C#-PRN292\ShopAPI\ShopAPI\bin\Release\netcoreapp2.1\ShopAPI.runtimeconfig.dev.json
+D:\C#-PRN292\ShopAPI\ShopAPI\bin\Release\netcoreapp2.1\ShopAPI.dll
+D:\C#-PRN292\ShopAPI\ShopAPI\bin\Release\netcoreapp2.1\ShopAPI.pdb
+D:\C#-PRN292\ShopAPI\ShopAPI\obj\Release\netcoreapp2.1\ShopAPI.csprojAssemblyReference.cache
+D:\C#-PRN292\ShopAPI\ShopAPI\obj\Release\netcoreapp2.1\ShopAPI.csproj.CoreCompileInputs.cache
+D:\C#-PRN292\ShopAPI\ShopAPI\obj\Release\netcoreapp2.1\ShopAPI.RazorAssemblyInfo.cache
+D:\C#-PRN292\ShopAPI\ShopAPI\obj\Release\netcoreapp2.1\ShopAPI.RazorAssemblyInfo.cs
+D:\C#-PRN292\ShopAPI\ShopAPI\obj\Release\netcoreapp2.1\UserSecretsAssemblyInfo.cs
+D:\C#-PRN292\ShopAPI\ShopAPI\obj\Release\netcoreapp2.1\ShopAPI.AssemblyInfoInputs.cache
+D:\C#-PRN292\ShopAPI\ShopAPI\obj\Release\netcoreapp2.1\ShopAPI.AssemblyInfo.cs
+D:\C#-PRN292\ShopAPI\ShopAPI\obj\Release\netcoreapp2.1\ShopAPI.RazorTargetAssemblyInfo.cache
+D:\C#-PRN292\ShopAPI\ShopAPI\obj\Release\netcoreapp2.1\ShopAPI.dll
+D:\C#-PRN292\ShopAPI\ShopAPI\obj\Release\netcoreapp2.1\ShopAPI.pdb

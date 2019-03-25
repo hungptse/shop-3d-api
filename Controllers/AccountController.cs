@@ -1,17 +1,12 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using ShopAPI.Entities;
+using ShopAPI.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using ShopAPI.Entities;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
 
 namespace ShopAPI.Controllers
 {
@@ -22,7 +17,7 @@ namespace ShopAPI.Controllers
     {
 
         private WebsiteShoppingContext _context = new WebsiteShoppingContext();
-       
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<Account>> Get()
@@ -49,7 +44,7 @@ namespace ShopAPI.Controllers
         }
 
         // POST api/values
-       
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProfile([FromRoute] string id, [FromBody] Dictionary<string, string> body)
@@ -90,6 +85,32 @@ namespace ShopAPI.Controllers
                 return NotFound();
             }
             return Ok();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult registerAccount([FromBody] Dictionary<string, string> body)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var username = body.GetValueOrDefault("username");
+            var account = _context.Account.Where(a => a.Username == username).FirstOrDefault();
+            //Include(a => a.Feedback).Include(a => a.Order)
+            if (account == null)
+            {
+                var name = body.GetValueOrDefault("name");
+                var password = body.GetValueOrDefault("password");
+                var email = body.GetValueOrDefault("email");
+                var phone = body.GetValueOrDefault("phone");
+                var address = body.GetValueOrDefault("address");
+                Account newAcc = new Account { Username = username, Name = name, Password = PasswordEncrypt.Encrypt(password), CreateAt = DateTime.Now, Address = address, Phone = phone, RoleId = 2, AvatarUrl = "https://firebasestorage.googleapis.com/v0/b/image-3d.appspot.com/o/img-user%2F17004.svg?alt=media&token=3f948179-534c-4825-9e59-4e5b91483085", Email = email, BirthDate = new DateTime(2000, 1, 1), Gender = true };
+                _context.Account.Add(newAcc);
+                _context.SaveChanges();
+                return Ok();
+            }
+            return BadRequest();
         }
 
     }

@@ -69,6 +69,9 @@ namespace ShopAPI.Controllers
                 int id = product.Value<int>("id");
                 int quantity = product.Value<int>("quantity");
                 double price = product.Value<double>("price");
+                Product p = _context.Product.Where(pro => pro.Id == id).SingleOrDefault();
+                int? oldQuantity = p.Quantity;
+                p.Quantity = oldQuantity - quantity;
                 OrderDetail detail = new OrderDetail { Quantity = quantity, ProId = id, OrderId = order.Id, Price = price };
                 _context.OrderDetail.Add(detail);
                 _context.SaveChanges();
