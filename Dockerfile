@@ -1,3 +1,5 @@
+ACCEPT_EULA=Y
+SA_PASSWORD=1qaZXsw2!@#
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build-env
 WORKDIR /app
 

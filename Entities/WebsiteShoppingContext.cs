@@ -29,9 +29,7 @@ namespace ShopAPI.Entities
         {
            if (!optionsBuilder.IsConfigured)
            {
-               //optionsBuilder.UseSqlServer("Data Source=HUNGPTSE63362;Initial Catalog=WebsiteShopping;User ID=sa;Password=sa;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
-               optionsBuilder.UseSqlServer("Server=tcp:shopapi-hungpt.database.windows.net,1433;Initial Catalog=ShopAPI-HungPT_db;Persist Security Info=False;User ID=hungpt;Password=Hungbi1998;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-
+               optionsBuilder.UseSqlServer("Server=tcp:hungpt.database.windows.net,1433;Initial Catalog=WebsiteShopping;Persist Security Info=False;User ID=hungpt;Password=1qaZXsw2!@#;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
         }
 
